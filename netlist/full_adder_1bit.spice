@@ -1,0 +1,58 @@
+** sch_path: /home/dharmendra/minor_project_1/full_adder_1bit.sch
+.subckt full_adder_1bit a b cin sum cout
+*.PININFO a:I b:I cin:I sum:O cout:O
+x1 net1 a b xor_ngspice ROUT=1000
+x2 sum net1 cin xor_ngspice ROUT=1000
+x5 cout net2 net3 or_ngspice ROUT=1000
+x3 net2 a b and_ngspice ROUT=1000
+x4 net3 net1 cin and_ngspice ROUT=1000
+.ends
+
+* expanding   symbol:  xor_ngspice.sym # of pins=3
+** sym_path: /usr/share/doc/xschem/ngspice/xor_ngspice.sym
+** sch_path: /usr/share/doc/xschem/ngspice/xor_ngspice.sch
+.subckt xor_ngspice Y A B  ROUT=1000
+*.PININFO A:I Y:O B:I
+B1 net1 0 V = 'VCC/2*(1+tanh((abs(V(A1)-V(B1))-VCC/2)*100))'
+R1 Y1 net1 'ROUT' m=1
+C1 A1 0 8f m=1
+C2 B1 0 8f m=1
+C3 Y1 0 8f m=1
+V1 A1 A 0
+V2 B1 B 0
+V3 Y Y1 0
+.ends
+
+
+* expanding   symbol:  or_ngspice.sym # of pins=3
+** sym_path: /usr/share/doc/xschem/ngspice/or_ngspice.sym
+** sch_path: /usr/share/doc/xschem/ngspice/or_ngspice.sch
+.subckt or_ngspice Y A B  ROUT=1000
+*.PININFO A:I Y:O B:I
+B1 net1 0 V = 'VCC/2*(1+tanh((max(V(A1),V(B1))-VCC/2)*100))'
+R1 Y1 net1 'ROUT' m=1
+C1 A1 0 8f m=1
+C2 B1 0 8f m=1
+C3 Y1 0 8f m=1
+V1 A1 A 0
+V2 B1 B 0
+V3 Y Y1 0
+.ends
+
+
+* expanding   symbol:  and_ngspice.sym # of pins=3
+** sym_path: /usr/share/doc/xschem/ngspice/and_ngspice.sym
+** sch_path: /usr/share/doc/xschem/ngspice/and_ngspice.sch
+.subckt and_ngspice Y A B  ROUT=1000
+*.PININFO A:I Y:O B:I
+B1 net1 0 V = 'VCC/2*(1+tanh((min(V(A1),V(B1))-VCC/2)*100))'
+R1 Y1 net1 'ROUT' m=1
+C1 A1 0 8f m=1
+C2 B1 0 8f m=1
+C3 Y1 0 8f m=1
+V1 A1 A 0
+V2 B1 B 0
+V3 Y Y1 0
+.ends
+
+.end
